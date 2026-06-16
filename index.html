@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>有间编辑部 · 项目汇报</title>
+<style>
+/* ── 字体 ── */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --paper:#f0e0c0;
+  --paper2:#e8d4a8;
+  --paper3:#ddc898;
+  --brown:#4a2c0a;
+  --brown2:#7a4a1a;
+  --brown3:#b07830;
+  --gold:#c8962a;
+  --ink:#2a1a08;
+  --cream:#faf3e0;
+  --red:#c0392b;
+  --shadow:rgba(42,26,8,0.25);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Noto Serif SC',serif;
+  overflow-x:hidden;
+  image-rendering:pixelated;
+}
+
+/* ── 牛皮纸纹理 ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect width='8' height='8' fill='%23f0e0c0'/%3E%3Crect x='0' y='0' width='2' height='2' fill='%23e8d4a8' opacity='0.5'/%3E%3Crect x='4' y='4' width='2' height='2' fill='%23e8d4a8' opacity='0.4'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%23ddc898' opacity='0.3'/%3E%3Crect x='6' y='2' width='1' height='1' fill='%23ddc898' opacity='0.3'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+
+/* ══════════════════════════════
+   像素装饰 SVG 组件（内联）
+══════════════════════════════ */
+
+/* ── 像素卡片 ── */
+.px-card{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  position:relative;
+  image-rendering:pixelated;
+  box-shadow:4px 4px 0 var(--brown);
+}
+.px-card::before{
+  content:'';
+  position:absolute;inset:5px;
+  border:2px dashed var(--brown3);
+  pointer-events:none;
+}
+
+/* ── 像素按钮 ── */
+.px-btn{
+  display:inline-block;
+  background:var(--cream);
+  border:3px solid var(--brown);
+  padding:8px 28px;
+  font-family:'Noto Serif SC',serif;
+  font-size:16px;
+  color:var(--brown);
+  letter-spacing:4px;
+  cursor:pointer;
+  box-shadow:3px 3px 0 var(--brown);
+  transition:transform .1s,box-shadow .1s;
+  text-decoration:none;
+}
+.px-btn:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--brown)}
+
+/* ── 像素标题装饰 ── */
+.px-title-wrap{
+  display:flex;align-items:center;gap:12px;
+  justify-content:center;
+}
+.px-diamond{
+  width:10px;height:10px;
+  background:var(--brown3);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+/* ── Section 通用 ── */
+.section{
+  position:relative;z-index:1;
+  min-height:100vh;
+  padding:60px 80px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.section+.section::before{
+  content:'';
+  display:block;
+  height:6px;
+  background:repeating-linear-gradient(90deg,var(--brown) 0,var(--brown) 8px,transparent 8px,transparent 16px);
+  position:absolute;top:0;left:0;right:0;
+}
+
+/* ── 章节标签 ── */
+.sec-tag{
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;
+  color:var(--brown3);
+  letter-spacing:2px;
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+  line-height:2;
+}
+.sec-tag::before,.sec-tag::after{
+  content:'';display:inline-block;
+  width:16px;height:3px;
+  background:var(--brown3);
+}
+
+.sec-title{
+  font-size:clamp(28px,3.5vw,48px);
+  color:var(--brown);
+  line-height:1.2;
+  margin-bottom:10px;
+  font-weight:900;
+  font-family:'Noto Serif SC',serif;
+}
+.sec-sub{
+  font-size:16px;color:var(--brown2);
+  margin-bottom:40px;line-height:1.9;
+  max-width:700px;
+  font-family:'Noto Serif SC',serif;
+}
+
+/* ══════════════════════════════
+   封面
+══════════════════════════════ */
+#cover{
+  background:var(--paper2);
+  min-height:100vh;
+  padding:0;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  overflow:hidden;
+}
+
+/* 封面顶部装饰条 */
+.cover-topbar{
+  height:8px;
+  background:repeating-linear-gradient(90deg,var(--brown) 0,var(--brown) 12px,var(--paper) 12px,var(--paper) 20px);
+}
+.cover-botbar{
+  height:8px;
+  background:repeating-linear-gradient(90deg,var(--brown) 0,var(--brown) 12px,var(--paper) 12px,var(--paper) 20px);
+}
+
+.cover-main{
+  flex:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 60px;
+  position:relative;
+}
+
+/* 四角磨损效果 */
+.cover-main::before,.cover-main::after{
+  content:'';
+  position:absolute;
+  width:60px;height:60px;
+  background:var(--paper2);
+  clip-path:polygon(0 0,100% 0,0 100%);
+}
+.cover-main::before{top:0;left:0}
+.cover-main::after{bottom:0;right:0;transform:rotate(180deg)}
+
+/* 装饰物 SVG */
+.deco-items{
+  position:absolute;inset:0;pointer-events:none;
+  overflow:hidden;
+}
+
+/* 封面标题区 */
+.cover-title-area{
+  text-align:center;
+  margin-bottom:32px;
+  position:relative;z-index:2;
+}
+
+.cover-title{
+  font-size:clamp(52px,7vw,88px);
+  color:var(--brown);
+  line-height:1;
+  font-weight:900;
+  font-family:'Noto Serif SC',serif;
+  text-shadow:4px 4px 0 rgba(74,44,10,0.2);
+  margin-bottom:8px;
+}
+
+.cover-tagline{
+  font-size:16px;
+  color:var(--brown2);
+  letter-spacing:3px;
+  font-family:'Noto Serif SC',serif;
+  margin-bottom:0;
+}
+
+/* 时间卡片行 */
+.cover-cards{
+  display:flex;gap:24px;justify-content:center;
+  margin-bottom:28px;
+  position:relative;z-index:2;
+}
+
+.time-card{
+  width:160px;
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:5px 5px 0 var(--brown);
+  padding:20px 16px 16px;
+  text-align:center;
+  position:relative;
+}
+.time-card::before{
+  content:'';
+  position:absolute;inset:5px;
+  border:2px dashed var(--brown3);
+  pointer-events:none;
+}
+.time-card .num{
+  font-family:'Press Start 2P',monospace;
+  font-size:36px;
+  color:var(--brown);
+  line-height:1;
+  display:block;
+  margin-bottom:2px;
+}
+.time-card .unit{
+  font-family:'Press Start 2P',monospace;
+  font-size:13px;
+  color:var(--brown2);
+  display:block;
+  margin-bottom:10px;
+}
+.time-card .label{
+  font-size:15px;
+  color:var(--brown2);
+  letter-spacing:2px;
+  border-top:2px dashed var(--brown3);
+  padding-top:8px;
+  display:block;
+  font-family:'Noto Serif SC',serif;
+}
+
+/* 召开会议按钮 */
+.cover-btn-wrap{
+  position:relative;z-index:2;
+}
+
+/* 人物行 */
+.cover-chars{
+  display:flex;gap:0;justify-content:center;align-items:flex-end;
+  position:relative;z-index:2;
+  margin-top:8px;
+}
+
+/* ── 像素人物（CSS绘制） ── */
+.char{
+  width:64px;height:96px;
+  position:relative;
+  image-rendering:pixelated;
+  flex-shrink:0;
+}
+
+
+/* ══════════════════════════════
+   装饰物 SVG（像素风）
+══════════════════════════════ */
+
+/* ══════════════════════════════
+   第一块：上下文
+══════════════════════════════ */
+#context{background:var(--paper)}
+
+.prob-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:28px;
+}
+
+.prob-card{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:4px 4px 0 var(--brown);
+  padding:24px 20px;
+  position:relative;
+}
+.prob-card::before{
+  content:'';position:absolute;inset:5px;
+  border:2px dashed var(--brown3);pointer-events:none;
+}
+.prob-card .p-icon{
+  font-size:24px;margin-bottom:10px;display:block;
+  image-rendering:pixelated;
+}
+.prob-card .p-title{
+  font-size:17px;color:var(--brown);font-weight:700;
+  margin-bottom:8px;
+  font-family:'Noto Serif SC',serif;
+}
+.prob-card .p-body{
+  font-size:14px;color:var(--brown2);line-height:1.9;
+  font-family:'Noto Serif SC',serif;
+}
+
+.core-card{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:4px 4px 0 var(--brown);
+  padding:24px 32px;
+  position:relative;
+  max-width:900px;
+}
+.core-card::before{
+  content:'';position:absolute;inset:5px;
+  border:2px dashed var(--brown3);pointer-events:none;
+}
+.core-card .c-title{
+  font-size:16px;color:var(--brown);font-weight:700;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+  font-family:'Noto Serif SC',serif;
+}
+.core-card .c-body{
+  font-size:16px;color:var(--ink);line-height:2.1;
+  font-family:'Noto Serif SC',serif;
+}
+
+/* ══════════════════════════════
+   第二块：解决方案
+══════════════════════════════ */
+#solution{background:var(--paper2)}
+
+.compare-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-bottom:28px;
+}
+
+.compare-col{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:4px 4px 0 var(--brown);
+  overflow:hidden;
+}
+.compare-col .col-head{
+  background:var(--brown);
+  color:var(--cream);
+  padding:12px 20px;
+  font-size:15px;
+  letter-spacing:2px;
+  font-weight:700;
+  display:flex;align-items:center;gap:8px;
+  font-family:'Noto Serif SC',serif;
+}
+.compare-col .col-body{
+  padding:0;
+}
+.compare-row{
+  display:flex;
+  border-bottom:2px dashed var(--brown3);
+}
+.compare-row:last-child{border-bottom:none}
+.compare-row .row-label{
+  width:100px;min-width:100px;
+  background:rgba(176,120,48,0.12);
+  padding:12px 14px;
+  font-size:13px;color:var(--brown2);font-weight:700;
+  border-right:2px dashed var(--brown3);
+  display:flex;align-items:center;
+  font-family:'Noto Serif SC',serif;
+}
+.compare-row .row-val{
+  padding:12px 16px;
+  font-size:14px;color:var(--ink);line-height:1.8;
+  flex:1;
+  font-family:'Noto Serif SC',serif;
+}
+.compare-col.new-col .row-val{
+  color:var(--brown);font-weight:600;
+}
+
+/* iframe */
+.demo-wrap{
+  border:3px solid var(--brown);
+  box-shadow:6px 6px 0 var(--brown);
+  position:relative;
+  background:#fff;
+}
+.demo-label{
+  background:var(--brown);
+  color:var(--cream);
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;
+  letter-spacing:1px;
+  padding:8px 16px;
+  display:flex;align-items:center;gap:8px;
+  line-height:2;
+}
+.demo-label::before{
+  content:'▶';font-size:8px;
+}
+.demo-wrap iframe{
+  width:100%;height:540px;border:none;display:block;
+}
+
+/* ══════════════════════════════
+   第三块：问题与计划
+══════════════════════════════ */
+#issues{background:var(--paper)}
+
+.issues-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+}
+
+.sub-title{
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;color:var(--brown3);
+  letter-spacing:2px;margin-bottom:16px;
+  display:flex;align-items:center;gap:6px;
+  line-height:2;
+}
+.sub-title::before{content:'■';font-size:8px}
+
+.issue-list{display:flex;flex-direction:column;gap:12px}
+.issue-item{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:3px 3px 0 var(--brown);
+  padding:16px 20px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.issue-num{
+  font-family:'Press Start 2P',monospace;
+  font-size:18px;color:var(--brown3);
+  line-height:1;min-width:28px;
+}
+.issue-title{font-size:16px;color:var(--brown);font-weight:700;margin-bottom:4px;font-family:'Noto Serif SC',serif;}
+.issue-desc{font-size:14px;color:var(--brown2);line-height:1.8;font-family:'Noto Serif SC',serif;}
+
+/* 时间线 */
+.timeline{
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+  padding-left:28px;
+}
+.timeline::before{
+  content:'';
+  position:absolute;left:7px;top:8px;bottom:8px;
+  width:3px;
+  background:repeating-linear-gradient(180deg,var(--brown3) 0,var(--brown3) 8px,transparent 8px,transparent 14px);
+}
+.tl-item{
+  position:relative;
+  padding:0 0 24px 20px;
+}
+.tl-dot{
+  position:absolute;left:-21px;top:4px;
+  width:14px;height:14px;
+  background:var(--brown);
+  border:3px solid var(--paper);
+  outline:2px solid var(--brown);
+  image-rendering:pixelated;
+}
+.tl-phase{
+  font-family:'Press Start 2P',monospace;
+  font-size:8px;color:var(--brown3);
+  letter-spacing:1px;margin-bottom:4px;
+  line-height:2;
+}
+.tl-title{font-size:16px;color:var(--brown);font-weight:700;margin-bottom:4px;font-family:'Noto Serif SC',serif;}
+.tl-desc{font-size:14px;color:var(--brown2);line-height:1.8;font-family:'Noto Serif SC',serif;}
+
+.success-card{
+  background:var(--cream);
+  border:3px solid var(--brown);
+  box-shadow:4px 4px 0 var(--brown);
+  padding:20px 24px;
+  margin-top:20px;
+  position:relative;
+}
+.success-card::before{
+  content:'';position:absolute;inset:5px;
+  border:2px dashed var(--brown3);pointer-events:none;
+}
+.success-card .s-title{
+  font-size:16px;color:var(--brown);font-weight:700;margin-bottom:10px;
+  font-family:'Noto Serif SC',serif;
+}
+.success-card .s-item{
+  font-size:14px;color:var(--brown2);line-height:2.1;
+  display:flex;align-items:flex-start;gap:8px;
+  font-family:'Noto Serif SC',serif;
+}
+.success-card .s-item::before{
+  content:'■';color:var(--brown3);font-size:10px;margin-top:4px;flex-shrink:0;
+}
+
+/* ── 页脚 ── */
+.footer{
+  position:relative;z-index:1;
+  text-align:center;padding:28px;
+  font-family:'Noto Serif SC',serif;
+  font-size:13px;color:var(--brown3);
+  letter-spacing:3px;
+  border-top:6px solid var(--brown);
+  background:var(--paper2);
+}
+
+/* ── 侧边导航 ── */
+.sidenav{
+  position:fixed;left:20px;top:50%;
+  transform:translateY(-50%);
+  z-index:200;
+  display:flex;flex-direction:column;gap:12px;
+}
+.sn-dot{
+  width:12px;height:12px;
+  background:var(--paper);
+  border:2px solid var(--brown2);
+  cursor:pointer;
+  transition:all .15s;
+  image-rendering:pixelated;
+}
+.sn-dot:hover,.sn-dot.active{
+  background:var(--brown);border-color:var(--brown);
+}
+
+/* ── 响应式 ── */
+@media(max-width:900px){
+  .section{padding:50px 24px}
+  .prob-grid,.compare-wrap,.issues-grid{grid-template-columns:1fr}
+  .cover-cards{flex-wrap:wrap}
+  .sidenav{display:none}
+}
+</style>
+</head>
+<body>
+
+
+<!-- 侧边导航 -->
+<nav class="sidenav" id="sidenav">
+  <div class="sn-dot active" onclick="goTo('cover')" title="封面"></div>
+  <div class="sn-dot" onclick="goTo('context')" title="上下文"></div>
+  <div class="sn-dot" onclick="goTo('solution')" title="解决方案"></div>
+  <div class="sn-dot" onclick="goTo('issues')" title="阶段性成果"></div>
+  <div class="sn-dot" onclick="goTo('plan')" title="后续计划"></div>
+  <div class="sn-dot" onclick="goTo('demo')" title="产品演示"></div>
+</nav>
+
+<!-- ══════════════════════════════
+     封面
+══════════════════════════════ -->
+<section class="section" id="cover">
+  <div class="cover-topbar"></div>
+
+  <div class="cover-main" style="padding:0;flex:1;position:relative;overflow:hidden">
+    <img
+      src="/Users/juaoao/Downloads/image_1781608696296.jpg"
+      alt="有间编辑部封面"
+      style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;image-rendering:pixelated;"
+    />
+  </div>
+  <div class="cover-botbar"></div>
+</section>
+
+<!-- ══════════════════════════════
+     00 项目背景（已删除）
+══════════════════════════════ -->
+<section class="section" id="background" style="display:none">
+  <div class="sec-tag">00 · BACKGROUND</div>
+  <h2 class="sec-title">为什么做这个项目？</h2>
+  <p class="sec-sub">小投入、小组织，搞清楚 AI 时代内容营销的新生产力组织方式。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <!-- 项目起源 -->
+    <div class="prob-card" style="grid-column:1/-1">
+      <div class="p-title">📌 项目起源</div>
+      <div class="p-body" style="font-size:15px;line-height:2">
+        我们想通过小投入、小组织，搞一个 <strong style="color:var(--brown)">Agent Team</strong>，实现内容和热点营销的价值产出——
+        <strong style="color:var(--brown)">1 分钟出判断，5 分钟出 Sample，8 分钟出 Brief</strong>。
+        一方面是做一个方向探索，一方面也是在过程中找到 AI 项目的新的生产力组织方式。
+      </div>
+    </div>
+
+    <!-- 工作方式 -->
+    <div class="prob-card">
+      <div class="p-title">⏰ 投入方式</div>
+      <div class="p-body">
+        每人每天大约 <strong style="color:var(--brown)">2–3 小时</strong>，利用业余时间跟着项目起步。有运营负责训练 Agent，有产品负责门户和架构设计，有技术负责记忆系统搞建、harness 工程和底座对接。
+      </div>
+    </div>
+
+    <!-- 里程碑 -->
+    <div class="prob-card">
+      <div class="p-title">🚀 一周上线</div>
+      <div class="p-body">
+        四个人，一周时间，有间编辑部就跟着跑起来了。
+        第一个闭环已经跑通：热点输入 → 1 分钟判断 → 5 分钟 Sample → 8 分钟 Brief。
+      </div>
+    </div>
+  </div>
+
+  <!-- 团队卡片 -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+    <div class="prob-card" style="text-align:center;padding:20px 16px">
+      <div style="font-size:32px;margin-bottom:8px">
+        <svg width="40" height="40" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="display:block;margin:0 auto 8px">
+          <rect x="3" y="0" width="4" height="4" fill="#f5c8a0"/>
+          <rect x="2" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="7" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="2" y="0" width="6" height="2" fill="#2a1a08"/>
+          <rect x="1" y="4" width="8" height="5" fill="#c0392b"/>
+          <rect x="3" y="4" width="4" height="1" fill="#f5ead6"/>
+          <rect x="0" y="5" width="1" height="3" fill="#c0392b"/>
+          <rect x="9" y="5" width="1" height="3" fill="#c0392b"/>
+          <rect x="2" y="9" width="3" height="1" fill="#2a3a5a"/>
+          <rect x="5" y="9" width="3" height="1" fill="#2a3a5a"/>
+        </svg>
+      </div>
+      <div class="p-title" style="font-size:15px">张新</div>
+      <div class="p-body" style="font-size:12px;margin-top:4px">🏆 项目主责人</div>
+      <div class="p-body" style="font-size:12px;color:var(--brown3)">Direction &amp; Review</div>
+    </div>
+    <div class="prob-card" style="text-align:center;padding:20px 16px">
+      <div style="font-size:32px;margin-bottom:8px">
+        <svg width="40" height="40" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="display:block;margin:0 auto 8px">
+          <rect x="3" y="0" width="4" height="4" fill="#f5c8a0"/>
+          <rect x="2" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="7" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="2" y="0" width="6" height="2" fill="#8e44ad"/>
+          <rect x="1" y="4" width="8" height="5" fill="#9b59b6"/>
+          <rect x="3" y="4" width="4" height="1" fill="#f5ead6"/>
+          <rect x="0" y="5" width="1" height="3" fill="#9b59b6"/>
+          <rect x="9" y="5" width="1" height="3" fill="#9b59b6"/>
+          <rect x="2" y="9" width="3" height="1" fill="#2a3a5a"/>
+          <rect x="5" y="9" width="3" height="1" fill="#2a3a5a"/>
+        </svg>
+      </div>
+      <div class="p-title" style="font-size:15px">李奕羼</div>
+      <div class="p-body" style="font-size:12px;margin-top:4px">📱 产品负责人</div>
+      <div class="p-body" style="font-size:12px;color:var(--brown3)">Portal &amp; Architecture</div>
+    </div>
+    <div class="prob-card" style="text-align:center;padding:20px 16px">
+      <div style="font-size:32px;margin-bottom:8px">
+        <svg width="40" height="40" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="display:block;margin:0 auto 8px">
+          <rect x="3" y="0" width="4" height="4" fill="#f5c8a0"/>
+          <rect x="2" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="7" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="2" y="0" width="6" height="2" fill="#4a90d9"/>
+          <rect x="1" y="4" width="8" height="5" fill="#2980b9"/>
+          <rect x="3" y="4" width="4" height="1" fill="#f5ead6"/>
+          <rect x="0" y="5" width="1" height="3" fill="#2980b9"/>
+          <rect x="9" y="5" width="1" height="3" fill="#2980b9"/>
+          <rect x="2" y="9" width="3" height="1" fill="#2a3a5a"/>
+          <rect x="5" y="9" width="3" height="1" fill="#2a3a5a"/>
+        </svg>
+      </div>
+      <div class="p-title" style="font-size:15px">马梦雪</div>
+      <div class="p-body" style="font-size:12px;margin-top:4px">🎨 运营负责人</div>
+      <div class="p-body" style="font-size:12px;color:var(--brown3)">Agent Training</div>
+    </div>
+    <div class="prob-card" style="text-align:center;padding:20px 16px">
+      <div style="font-size:32px;margin-bottom:8px">
+        <svg width="40" height="40" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="display:block;margin:0 auto 8px">
+          <rect x="3" y="0" width="4" height="4" fill="#f5c8a0"/>
+          <rect x="2" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="7" y="1" width="1" height="3" fill="#f5c8a0"/>
+          <rect x="2" y="0" width="6" height="2" fill="#2c3e50"/>
+          <rect x="1" y="4" width="8" height="5" fill="#2c3e50"/>
+          <rect x="3" y="4" width="4" height="1" fill="#f5ead6"/>
+          <rect x="0" y="5" width="1" height="3" fill="#2c3e50"/>
+          <rect x="9" y="5" width="1" height="3" fill="#2c3e50"/>
+          <rect x="2" y="9" width="3" height="1" fill="#2a3a5a"/>
+          <rect x="5" y="9" width="3" height="1" fill="#2a3a5a"/>
+        </svg>
+      </div>
+      <div class="p-title" style="font-size:15px">宾义</div>
+      <div class="p-body" style="font-size:12px;margin-top:4px">⚙️ 算法负责人</div>
+      <div class="p-body" style="font-size:12px;color:var(--brown3)">Memory &amp; Harness</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════
+     01 上下文
+══════════════════════════════ -->
+<section class="section" id="context">
+  <div class="sec-tag">01 · CONTEXT</div>
+  <h2 class="sec-title">我们要解决什么问题？</h2>
+  <p class="sec-sub">内容营销不缺 idea，缺的是快速判断、改造、落地 idea 的机制。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch">
+
+    <!-- 左：两张问题卡片上下叠 -->
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div class="prob-card" style="padding:36px 32px;flex:1">
+        <span class="p-icon">
+          <svg width="28" height="28" viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+            <rect x="3" y="0" width="1" height="2" fill="#c8962a"/>
+            <rect x="1" y="1" width="5" height="4" fill="#f5c842"/>
+            <rect x="0" y="2" width="7" height="2" fill="#f5c842"/>
+            <rect x="2" y="5" width="3" height="1" fill="#c8962a"/>
+            <rect x="3" y="6" width="1" height="1" fill="#c8962a"/>
+          </svg>
+        </span>
+        <div class="p-title" style="font-size:20px;margin:16px 0 12px">灵感来了，判断慢</div>
+        <div class="p-body" style="font-size:15px;line-height:2">负责人看到热点或竞品动作，问"这个我们能不能跟"——但团队需要调研、讨论、对齐，往往错过窗口期。</div>
+      </div>
+      <div class="prob-card" style="padding:36px 32px;flex:1">
+        <span class="p-icon">
+          <svg width="28" height="28" viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+            <rect x="1" y="2" width="5" height="1" fill="#4a2c0a"/>
+            <rect x="3" y="0" width="1" height="7" fill="#4a2c0a"/>
+            <rect x="0" y="3" width="2" height="1" fill="#c8962a"/>
+            <rect x="5" y="3" width="2" height="1" fill="#c8962a"/>
+          </svg>
+        </span>
+        <div class="p-title" style="font-size:20px;margin:16px 0 12px">方向对了，落地难</div>
+        <div class="p-body" style="font-size:15px;line-height:2">即使判断方向可行，还要改造 idea、拆方案、写脚本、找素材、做 demo，每一步都是人力消耗。</div>
+      </div>
+    </div>
+
+    <!-- 右：核心矛盾撑满整列 -->
+    <div class="core-card" style="margin:0;display:flex;flex-direction:column;justify-content:center">
+      <div class="c-title">
+        <svg width="16" height="16" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect x="1" y="0" width="2" height="4" fill="#c8962a"/>
+          <rect x="0" y="1" width="4" height="2" fill="#c8962a"/>
+        </svg>
+        核心矛盾
+      </div>
+      <div class="c-body">
+        负责人脑子里的灵感，和团队可以判断、讨论、执行、复盘的内容方案之间，<br/>
+        缺少一套 <strong style="color:var(--brown);font-size:17px">快速转化机制</strong>。
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     02 解决方案
+══════════════════════════════ -->
+<section class="section" id="solution">
+  <div class="sec-tag">02 · SOLUTION</div>
+  <h2 class="sec-title">过去靠人，现在靠谁？</h2>
+  <p class="sec-sub">从被动响应到主动观察，从人力拼接到 Agent 协作。</p>
+  <p style="font-size:22px;color:var(--brown);font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:4px;margin-bottom:36px;margin-top:-8px">无调度涌现，有调度交付。</p>
+
+  <div class="compare-wrap">
+    <!-- 过去的做法 -->
+    <div class="compare-col">
+      <div class="col-head">
+        <svg width="14" height="14" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect x="1" y="0" width="2" height="4" fill="#f5ead6"/><rect x="0" y="1" width="4" height="2" fill="#f5ead6"/></svg>
+        🐢 &nbsp;过去的做法
+      </div>
+      <div class="col-body">
+        <div class="compare-row">
+          <div class="row-label">热点判断</div>
+          <div class="row-val" style="color:#888">人工搜索、开会讨论、对齐方向，1-2天</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">方案生成</div>
+          <div class="row-val" style="color:#888">策划手写方案，多轮修改，3-5天</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">内容产出</div>
+          <div class="row-val" style="color:#888">文案、脚本、素材分头找人，排期协调</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">风险把控</div>
+          <div class="row-val" style="color:#888">依赖个人经验，事后发现问题</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 有间编辑部的做法 -->
+    <div class="compare-col new-col">
+      <div class="col-head" style="background:var(--brown3)">
+        <svg width="14" height="14" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect x="1" y="0" width="2" height="4" fill="#2a1a08"/><rect x="0" y="1" width="4" height="2" fill="#2a1a08"/></svg>
+        ⚡ &nbsp;有间编辑部的做法
+      </div>
+      <div class="col-body">
+        <div class="compare-row">
+          <div class="row-label">热点判断</div>
+          <div class="row-val">主编 Agent + 黑脸 Agent，<strong>1 分钟</strong>给出判断、风险和建议</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">方案生成</div>
+          <div class="row-val">营销策略 + Demo 执行 Agent，<strong>5 分钟</strong>出 Sample，<strong>8 分钟</strong>出可评审 Brief</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">内容产出</div>
+          <div class="row-val">内容选题 Agent 统一输出脚本、图文、达人 brief</div>
+        </div>
+        <div class="compare-row">
+          <div class="row-label">风险把控</div>
+          <div class="row-val">舆论风险 Agent 事前扫描，黑脸 Agent 主动反驳</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════
+     DEMO 产品演示
+══════════════════════════════ -->
+<section class="section" id="demo" style="padding:48px 60px 60px">
+  <div class="sec-tag">DEMO · NOCODE</div>
+  <h2 class="sec-title">有间编辑部门户</h2>
+  <p class="sec-sub">基于 NoCode 搭建，大象机器人接入，对话即触发工作流。</p>
+  <div class="demo-wrap" style="margin-top:0">
+    <div class="demo-label">LIVE DEMO · 有间编辑部门户</div>
+    <iframe src="https://hot158.mynocode.host" allowfullscreen></iframe>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     03 阶段性成果
+══════════════════════════════ -->
+<section class="section" id="issues">
+  <div class="sec-tag">03 · RESULTS</div>
+  <h2 class="sec-title">阶段性成果</h2>
+  <p class="sec-sub">第一周，闭环跑通。</p>
+
+  <!-- 闭环流程 -->
+  <div style="display:flex;align-items:stretch;gap:0;margin-bottom:40px">
+    <div style="flex:1;background:var(--paper3);border:2px solid var(--brown3);padding:24px 20px">
+      <div style="font-size:9px;color:var(--brown3);font-family:'Press Start 2P',monospace;letter-spacing:1px;margin-bottom:10px">INPUT</div>
+      <div style="font-size:16px;font-weight:700;color:var(--brown);font-family:'Noto Serif SC',serif;margin-bottom:6px">热点输入</div>
+      <div style="font-size:12px;color:var(--brown2);line-height:1.8">一条热点、一个竞品动作、一个业务 brief</div>
+    </div>
+    <div style="display:flex;align-items:center;padding:0 4px;color:var(--brown3);font-size:20px;flex-shrink:0">▶</div>
+    <div style="flex:1;background:var(--paper3);border:2px solid var(--brown3);padding:24px 20px">
+      <div style="font-size:9px;color:var(--brown3);font-family:'Press Start 2P',monospace;letter-spacing:1px;margin-bottom:10px">1 MIN</div>
+      <div style="font-size:16px;font-weight:700;color:var(--brown);font-family:'Noto Serif SC',serif;margin-bottom:6px">判断</div>
+      <div style="font-size:12px;color:var(--brown2);line-height:1.8">主编 Agent + 黑脸 Agent 给出做/不做 + 风险提示</div>
+    </div>
+    <div style="display:flex;align-items:center;padding:0 4px;color:var(--brown3);font-size:20px;flex-shrink:0">▶</div>
+    <div style="flex:1;background:var(--paper3);border:2px solid var(--brown3);padding:24px 20px">
+      <div style="font-size:9px;color:var(--brown3);font-family:'Press Start 2P',monospace;letter-spacing:1px;margin-bottom:10px">5–8 MIN</div>
+      <div style="font-size:16px;font-weight:700;color:var(--brown);font-family:'Noto Serif SC',serif;margin-bottom:6px">方案</div>
+      <div style="font-size:12px;color:var(--brown2);line-height:1.8">营销策略 Agent 出 Sample，执行 Agent 出完整 Brief</div>
+    </div>
+    <div style="display:flex;align-items:center;padding:0 4px;color:var(--brown3);font-size:20px;flex-shrink:0">▶</div>
+    <div style="flex:1;background:var(--brown);border:2px solid var(--brown);padding:24px 20px">
+      <div style="font-size:9px;color:var(--brown3);font-family:'Press Start 2P',monospace;letter-spacing:1px;margin-bottom:10px">OUTPUT</div>
+      <div style="font-size:16px;font-weight:700;color:var(--paper);font-family:'Noto Serif SC',serif;margin-bottom:6px">出街工作流</div>
+      <div style="font-size:12px;color:var(--paper2);line-height:1.8">可评审的 Brief 直接交付，人工 review 后出街</div>
+    </div>
+  </div>
+
+  <!-- 成果列表 -->
+  <div class="issue-list">
+    <div class="issue-item">
+      <div class="issue-num">✓</div>
+      <div>
+        <div class="issue-title">闭环跑通</div>
+        <div class="issue-desc">热点输入 → 1 分钟判断 → 5 分钟 Sample → 8 分钟 Brief，第一个完整链路已验证。</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-num">✓</div>
+      <div>
+        <div class="issue-title">门户上线</div>
+        <div class="issue-desc">有间编辑部门户已部署，大象机器人接入，可通过对话触发工作流。</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-num">✓</div>
+      <div>
+        <div class="issue-title">实际业务应用 · 世界杯整合营销</div>
+        <div class="issue-desc">世界杯热点整合营销方案正式上线。引入外卖、闪购和逛逛业务的渠道预算、加补权益和供给，随世界杯赛事一起上线。素材生产端以「有间编辑部」产出的创意 sample 为基础，借美灵 AI 放大产能规模，实现 T+0 输出承接主视觉、T+1 完成外投素材产出上线。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     04 后续计划
+══════════════════════════════ -->
+<section class="section" id="plan" style="background:var(--paper2)">
+  <div class="sec-tag">04 · NEXT</div>
+  <h2 class="sec-title">后续计划</h2>
+  <p class="sec-sub">从闭环跑通，到稳定交付。</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">WEEK 2-3</div>
+      <div class="tl-title">接入真实 brief</div>
+      <div class="tl-desc">服务 1-2 个真实业务需求，验证"1分钟判断 → 8分钟方案"的 SLA。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">MONTH 1</div>
+      <div class="tl-title">稳定产出 + 记忆沉淀</div>
+      <div class="tl-desc">每周稳定输出《本周有间观察》，跑通复盘写回闭环，经验沉淀进 Agent 记忆。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">LONG TERM</div>
+      <div class="tl-title">组织化内容交付</div>
+      <div class="tl-desc">让有间编辑部成为内容营销的标准基础设施，任何 brief 进来都能快速组织化响应。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  有间编辑部 &nbsp;·&nbsp; 无调度涌现，有调度交付 &nbsp;·&nbsp; 2025
+</footer>
+
+<script>
+const sections=['cover','background','context','solution','issues','plan','demo'];
+const dots=document.querySelectorAll('.sn-dot');
+function updateNav(){
+  let cur=0;
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-window.innerHeight/2)cur=i;
+  });
+  dots.forEach((d,i)=>d.classList.toggle('active',i===cur));
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+function goTo(id){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
