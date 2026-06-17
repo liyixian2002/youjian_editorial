@@ -562,7 +562,7 @@ body::before{
   <div class="sn-dot" onclick="goTo('context')" title="上下文"></div>
   <div class="sn-dot" onclick="goTo('solution')" title="解决方案"></div>
   <div class="sn-dot" onclick="goTo('issues')" title="阶段性成果"></div>
-  <div class="sn-dot" onclick="goTo('plan')" title="后续计划"></div>
+  <div class="sn-dot" onclick="goTo('problems')" title="过程中的问题"></div>
   <div class="sn-dot" onclick="goTo('demo')" title="产品演示"></div>
 </nav>
 
@@ -827,12 +827,15 @@ body::before{
      DEMO 产品演示
 ══════════════════════════════ -->
 <section class="section" id="demo" style="padding:48px 60px 60px">
-  <div class="sec-tag">DEMO · NOCODE</div>
+  <div class="sec-tag">DEMO · PREVIEW</div>
   <h2 class="sec-title">有间编辑部门户</h2>
   <p class="sec-sub">基于 NoCode 搭建，大象机器人接入，对话即触发工作流。</p>
   <div class="demo-wrap" style="margin-top:0">
-    <div class="demo-label">LIVE DEMO · 有间编辑部门户</div>
-    <iframe src="https://hot158.mynocode.host" allowfullscreen></iframe>
+    <div class="demo-label">▶ DEMO · 有间编辑部门户演示</div>
+    <video controls playsinline style="width:100%;display:block;background:#000" poster="">
+      <source src="有间编辑部展示.mp4" type="video/mp4">
+      浏览器不支持播放此视频。
+    </video>
   </div>
 </section>
 
@@ -897,32 +900,87 @@ body::before{
   </div>
 </section>
 
+
 <!-- ══════════════════════════════
-     04 后续计划
+     05 过程中碰到的问题
 ══════════════════════════════ -->
-<section class="section" id="plan" style="background:var(--paper2)">
-  <div class="sec-tag">04 · NEXT</div>
-  <h2 class="sec-title">后续计划</h2>
-  <p class="sec-sub">从闭环跑通，到稳定交付。</p>
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-phase">WEEK 2-3</div>
-      <div class="tl-title">接入真实 brief</div>
-      <div class="tl-desc">服务 1-2 个真实业务需求，验证"1分钟判断 → 8分钟方案"的 SLA。</div>
+<section class="section" id="problems">
+  <div class="sec-tag">05 · LESSONS</div>
+  <h2 class="sec-title">过程中碰到的问题</h2>
+  <p class="sec-sub">哪些解决了，哪些还没解决。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
+
+    <!-- 左：已解决 -->
+    <div>
+      <div class="sub-title" style="margin-bottom:20px;color:#2e7d32">■ 已解决</div>
+      <div class="issue-list">
+        <div class="issue-item" style="border-color:#4caf50;box-shadow:3px 3px 0 #4caf50">
+          <div class="issue-num" style="color:#2e7d32">✓</div>
+          <div>
+            <div class="issue-title">Sample 生成成功率低</div>
+            <div class="issue-desc">第二场会议的交付物 Sample 有概率不显示，可能是生成失败，也可能是生成成功写入表中但未读取展示。解法：更换生成成功率更高的模型。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#4caf50;box-shadow:3px 3px 0 #4caf50">
+          <div class="issue-num" style="color:#2e7d32">✓</div>
+          <div>
+            <div class="issue-title">Sample 素材与议题不符</div>
+            <div class="issue-desc">设计师 Agent 出的 Sample 素材跑偏，例如到餐的策略出的是外卖的文案。解法：多喂给 Agent 外卖场景以外的素材和词库，扩充训练覆盖面。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#4caf50;box-shadow:3px 3px 0 #4caf50">
+          <div class="issue-num" style="color:#2e7d32">✓</div>
+          <div>
+            <div class="issue-title">Agent 输出污染</div>
+            <div class="issue-desc">多 Agent 工作流最终输出夹带"skill xxx is loading"、"正在调用 xx skill"等过程信息，直接透出给用户影响体验。解法：在 SSE 事件解析函数里增加对 thinking 和 tool 类型帧的判断，遇到这两种类型直接丢弃不拼接，只保留真正的回答内容输出给用户。</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-phase">MONTH 1</div>
-      <div class="tl-title">稳定产出 + 记忆沉淀</div>
-      <div class="tl-desc">每周稳定输出《本周有间观察》，跑通复盘写回闭环，经验沉淀进 Agent 记忆。</div>
+
+    <!-- 右：未解决 -->
+    <div>
+      <div class="sub-title" style="margin-bottom:20px;color:#c62828">■ 未解决</div>
+      <div class="issue-list">
+        <div class="issue-item" style="border-color:#e53935;box-shadow:3px 3px 0 #e53935">
+          <div class="issue-num" style="color:#c62828">△</div>
+          <div>
+            <div class="issue-title">切换 Session 后 Sample 生成中断</div>
+            <div class="issue-desc">切换议题开启新 Session 后，Sample 生成任务会中断，成功率为 0。该问题目前依旧未解决，需要进一步排查 Session 切换时的任务生命周期管理。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#e53935;box-shadow:3px 3px 0 #e53935">
+          <div class="issue-num" style="color:#c62828">△</div>
+          <div>
+            <div class="issue-title">前端交互常规</div>
+            <div class="issue-desc">B 端 PM 做 C 端交互存在短板，门户体验偏工具化，缺乏消费级产品的交互质感。暂无解法。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#e53935;box-shadow:3px 3px 0 #e53935">
+          <div class="issue-num" style="color:#c62828">△</div>
+          <div>
+            <div class="issue-title">三阶段交付物生成超时</div>
+            <div class="issue-desc">三阶段的交付物无法在规定时间内生成完成。解法：更换速度更快的模型，但生成质量无法保证，速度与质量之间存在取舍。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#e53935;box-shadow:3px 3px 0 #e53935">
+          <div class="issue-num" style="color:#c62828">△</div>
+          <div>
+            <div class="issue-title">行为数据缺失，无法做漏斗分析</div>
+            <div class="issue-desc">想做更具体的数据分析，但后台数据不支持。例如：用户召开会议后有没有看判断卡？多少人继续产出了 Sample？多少人出了 Brief？都在哪个环节退出？按原来模式埋点需要 5pd+。暂无解法。</div>
+          </div>
+        </div>
+        <div class="issue-item" style="border-color:#e53935;box-shadow:3px 3px 0 #e53935">
+          <div class="issue-num" style="color:#c62828">△</div>
+          <div>
+            <div class="issue-title">Brief 跳转 Wiki 成功率低</div>
+            <div class="issue-desc">生成的完整 Brief 跳转到 Wiki 成功率不高。暂无解法。</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-phase">LONG TERM</div>
-      <div class="tl-title">组织化内容交付</div>
-      <div class="tl-desc">让有间编辑部成为内容营销的标准基础设施，任何 brief 进来都能快速组织化响应。</div>
-    </div>
+
   </div>
 </section>
 
@@ -932,7 +990,7 @@ body::before{
 </footer>
 
 <script>
-const sections=['cover','background','context','solution','issues','plan','demo'];
+const sections=['cover','background','context','solution','issues','problems','demo'];
 const dots=document.querySelectorAll('.sn-dot');
 function updateNav(){
   let cur=0;
